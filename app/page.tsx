@@ -53,6 +53,7 @@ const LoanCalculator = () => {
   const [monthlyAmortization, setMonthlyAmortization] = useState<number | null>(null);
   const [netTakeHome, setNetTakeHome] = useState<number | null>(null);
   const [amountError, setAmountError] = useState('');
+  const [salaryPerCutOff, setSalaryPerCutOff] = useState<number | null>(null);
 
   const selectedGrade = SALARY_GRADES.find(grade => grade.grade === salaryGrade);
   const maxLoanableAmount = selectedGrade ? selectedGrade.maxLoanableAmount : 0;
@@ -91,11 +92,13 @@ const LoanCalculator = () => {
     const totalAmountPayablePerCutoff = (x / z) + totalInterestPerCutoff;
     const monthlyAmort = totalAmountPayablePerCutoff * 2;
     const netTakeHome = monthlyRate - monthlyAmort;
+    const salaryPerCutOff = netTakeHome / 2;
 
     setTotalAmountPayable(parseFloat(totalAmountPayablePerCutoff.toFixed(2)));
     setCalculatedInterest(parseFloat(totalInterest.toFixed(2)));
     setMonthlyAmortization(parseFloat(monthlyAmort.toFixed(2)));
     setNetTakeHome(parseFloat(netTakeHome.toFixed(2)));
+    setSalaryPerCutOff(parseFloat(salaryPerCutOff.toFixed(2)));
   };
 
   useEffect(() => {
@@ -274,8 +277,15 @@ const LoanCalculator = () => {
 
             {netTakeHome !== null && (
               <div className="text-gray-700">
-                <span className="font-medium">Net Take Home: </span>
+                <span className="font-medium">Net Take Home (Monthly): </span>
                 <span className="text-indigo-600">PHP {netTakeHome.toLocaleString()}</span>
+              </div>
+            )}
+
+            {salaryPerCutOff !== null && (
+              <div className="text-gray-700">
+                <span className="font-medium">Salary per cutoff: </span>
+                <span className="text-indigo-600">PHP {salaryPerCutOff.toLocaleString()}</span>
               </div>
             )}
           </div>
